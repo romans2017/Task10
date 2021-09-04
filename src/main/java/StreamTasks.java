@@ -30,14 +30,9 @@ public class StreamTasks {
         return map.entrySet()
                 .stream()
                 .parallel()
-                .sorted((item1, item2) -> {
-                    int res = item2.getValue() - item1.getValue();
-                    if (res == 0) {
-                        return item1.getKey().compareTo(item2.getKey());
-                    } else {
-                        return res;
-                    }
-                })
+                .sorted(Map.Entry
+                        .<String, Integer>comparingByValue(Comparator.reverseOrder())
+                        .thenComparing(Map.Entry::getKey))
                 .flatMap(item -> Stream.of(item.getKey()))
                 .limit(10)
                 .collect(Collectors.toList());
